@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Komplain Rumah Sakit</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #f8fbff);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo{
+    width:120px;
+    height:120px;
+    margin:auto;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.logo img{
+    max-width:100px;
+    max-height:100px;
+    object-fit:contain;
+}
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #0d47a1;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cfd8dc;
+      border-radius: 10px;
+      font-size: 15px;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #1565c0;
+      box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.15);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #1565c0;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0d47a1;
+    }
+
+    #hasil {
+      text-align: center;
+      margin-top: 18px;
+      font-weight: bold;
+      color: #1b5e20;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="logo">
+   <img src="logors.png" alt="Logo RS">
+</div>
+      <h1>Form Komplain Rumah Sakit Baiturrahim</h1>
+      <div class="subtitle">Silakan isi data komplain dengan lengkap dan benar</div>
+    </div>
+
+    <form id="formKomplain">
+      <label>Nama Pelapor</label>
+      <input id="nama" type="text" placeholder="Masukkan nama lengkap" required />
+
+      <label>No HP</label>
+      <input id="noHp" type="text" placeholder="Contoh: 08123456789" required />
+
+      <label>Unit</label>
+      <select id="unit" required>
+        <option value="">Pilih unit</option>
+        <option>IGD</option>
+        <option>Rawat Jalan</option>
+        <option>Rawat Inap</option>
+        <option>Farmasi</option>
+        <option>Laboratorium</option>
+        <option>Administrasi</option>
+      </select>
+
+      <label>Jenis Komplain</label>
+      <select id="jenis" required>
+        <option value="">Pilih jenis komplain</option>
+        <option>Pelayanan</option>
+        <option>Fasilitas</option>
+        <option>Administrasi</option>
+        <option>Tenaga Medis</option>
+        <option>Lainnya</option>
+      </select>
+
+      <label>Isi Komplain</label>
+      <textarea id="isi" placeholder="Tuliskan komplain Anda..." required></textarea>
+
+      <button type="submit">Kirim Komplain</button>
+    </form>
+
+    <p id="hasil"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById("formKomplain");
+    const hasil = document.getElementById("hasil");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        nama: document.getElementById("nama").value,
+        noHp: document.getElementById("noHp").value,
+        unit: document.getElementById("unit").value,
+        jenis: document.getElementById("jenis").value,
+        isi: document.getElementById("isi").value
+      };
+
+      const response = await fetch("/api/komplain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      hasil.innerText = result.message;
+
+      if (response.ok) {
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
